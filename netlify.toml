@@ -1,0 +1,12 @@
+[build]
+  publish = "web"
+  command = "echo 'static site — no build step'"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"

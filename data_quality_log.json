@@ -1,0 +1,121 @@
+{
+  "summary": {
+    "forecast_origin": "2025-11-30",
+    "skus": 50,
+    "weeks": 104,
+    "first_week": "2024-01-07",
+    "last_week": "2025-12-28",
+    "holdout_weeks": 4,
+    "total_units": 510082,
+    "total_revenue": 3085562054.8100004,
+    "unmapped_inventory_skus": 150,
+    "unmapped_inventory_value_latest": 174874618.36
+  },
+  "issues": [
+    {
+      "table": "Stock_data.csv",
+      "issue": "Unrelated file: equity price history (AABA ticker 2006\u20132017)",
+      "count": null,
+      "action": "Excluded from the pipeline",
+      "rationale": "Not part of the NorthBay star schema; no join key to any table."
+    },
+    {
+      "table": "sales_daily",
+      "issue": "Duplicate (date, sku) rows",
+      "count": 0,
+      "action": "None found \u2014 no action",
+      "rationale": "One row per SKU-day is the declared grain."
+    },
+    {
+      "table": "sales_daily",
+      "issue": "Negative units_sold (returns?)",
+      "count": 0,
+      "action": "None found \u2014 no action",
+      "rationale": "Returns are not demand."
+    },
+    {
+      "table": "sales_daily",
+      "issue": "Missing numeric values",
+      "count": 0,
+      "action": "None found \u2014 no action",
+      "rationale": "A missing sales row means nothing sold that day."
+    },
+    {
+      "table": "sales_daily",
+      "issue": "revenue != units_sold * unit_price (>\u20b91 gap)",
+      "count": 0,
+      "action": "None found \u2014 internally consistent",
+      "rationale": "Revenue is the booked figure; price is a reference."
+    },
+    {
+      "table": "sales_daily",
+      "issue": "Rows retained after cleaning",
+      "count": 36550,
+      "action": "36550 \u2192 36550",
+      "rationale": ""
+    },
+    {
+      "table": "sku_master",
+      "issue": "launch_date AFTER first recorded sale",
+      "count": 21,
+      "action": "launch_date overridden with first_sale_date (original kept as launch_date_master)",
+      "rationale": "Sales history is the stronger evidence; a product cannot sell before launch."
+    },
+    {
+      "table": "sku_master",
+      "issue": "list_price below unit_cost (negative gross margin)",
+      "count": 16,
+      "action": "Kept; flagged margin_flag='negative' and surfaced to Finance",
+      "rationale": "Cannot be corrected from data \u2014 likely a master-data error or loss-leader; must be confirmed by client."
+    },
+    {
+      "table": "sku_master",
+      "issue": "category/subcategory pairs that look inconsistent (e.g. Kitchen\u2192Cushion)",
+      "count": 40,
+      "action": "Kept the master 'category' for reporting; added 'subcategory_group' as a sanity view",
+      "rationale": "Category is the client's planning hierarchy; we do not silently re-classify their catalogue."
+    },
+    {
+      "table": "inventory_snapshots",
+      "issue": "SKUs present in inventory but with NO sales history (SKU051\u2013SKU200)",
+      "count": 150,
+      "action": "Excluded from forecasting/risk; listed separately as 'unsellable-or-unmapped stock' for the client",
+      "rationale": "No demand signal \u2192 cannot forecast; likely discontinued or master-data gap. Raised as a finding."
+    },
+    {
+      "table": "inventory_snapshots",
+      "issue": "Duplicate (date, sku) snapshots",
+      "count": 0,
+      "action": "None found \u2014 no action",
+      "rationale": ""
+    },
+    {
+      "table": "inventory_snapshots",
+      "issue": "Snapshot cadence",
+      "count": 24,
+      "action": "Monthly snapshots (1st of month); latest = 2025-12-01",
+      "rationale": "Risk scoring uses the latest snapshot as the opening stock position at the forecast origin."
+    },
+    {
+      "table": "calendar",
+      "issue": "Blank holiday / promotion_event cells",
+      "count": null,
+      "action": "Treated as 'None' (not missing)",
+      "rationale": "Blank means no event that day."
+    },
+    {
+      "table": "sales_weekly",
+      "issue": "Partial weeks at series edges (fewer than 7 days)",
+      "count": 50,
+      "action": "Dropped",
+      "rationale": "A 3-day 'week' would look like a demand crash and poison the model."
+    },
+    {
+      "table": "sales_weekly",
+      "issue": "SKU-weeks with no sales rows at all",
+      "count": 0,
+      "action": "Filled with 0 units",
+      "rationale": "No row = no sale."
+    }
+  ]
+}

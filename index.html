@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FORESIGHT · NorthBay Living planning dashboard</title>
+<script src="chart.umd.min.js"></script>
+<style>
+:root{--navy:#14122b;--navy2:#1f1b45;--violet:#5b4fd6;--violet2:#7c72e6;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8985;--line:#e6e6e3;--surface:#fcfcfb;--card:#ffffff;
+--blue:#2a78d6;--orange:#eb6834;--aqua:#1baf7a;--yellow:#eda100;--red:#e34948;--purple:#4a3aa7;--green:#008300;--redbg:#fdecec;--purplebg:#edeaf8;--greenbg:#e8f4e8;--yellowbg:#fff5dc}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--surface);color:var(--ink);font-size:14px;line-height:1.45}
+header{background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:20px;letter-spacing:.3px}header h1 span{color:#b3acff;font-weight:500}header .sub{font-size:12px;color:#c9c6e8;margin-top:3px}
+.badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:8px;font-size:12px}
+nav{display:flex;gap:4px;padding:0 28px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px;font-size:14px;color:var(--ink2);cursor:pointer;white-space:nowrap}nav button.active{color:var(--violet);border-bottom-color:var(--violet);font-weight:600}
+main{padding:20px 28px;max-width:1400px;margin:0 auto}.tab{display:none}.tab.active{display:block}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select,input[type=search],input[type=number]{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;min-width:150px}
+label.f{font-size:12px;color:var(--ink2);display:flex;flex-direction:column;gap:4px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}.kpi .l{font-size:12px;color:var(--ink2)}.kpi .v{font-size:24px;font-weight:700;margin-top:4px}.kpi .s{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi.red .v{color:var(--red)}.kpi.purple .v{color:var(--purple)}.kpi.green .v{color:var(--green)}.kpi.blue .v{color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;grid-column:span 12}
+.card h3{margin:0 0 4px;font-size:15px}.card .d{font-size:12px;color:var(--ink2);margin-bottom:10px}
+.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}.c5{grid-column:span 5}.c7{grid-column:span 7}
+@media(max-width:900px){.c6,.c4,.c8,.c5,.c7{grid-column:span 12}}
+.chart{position:relative;height:300px}.chart.tall{height:420px}.chart.short{height:230px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink2);padding:8px 8px;border-bottom:1px solid var(--line);background:#faf9f7;position:sticky;top:0;cursor:pointer}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}tr:hover td{background:#f7f6ff}.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{max-height:460px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.q-Reorder{background:var(--redbg);color:var(--red)}.q-Markdown{background:var(--purplebg);color:var(--purple)}.q-Watch{background:var(--yellowbg);color:#8a5d00}.q-Healthy{background:var(--greenbg);color:var(--green)}
+.empty{padding:34px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px;font-size:13px}
+.loading{padding:60px;text-align:center;color:var(--ink2)}.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--violet);border-radius:50%;animation:s 1s linear infinite;margin:0 auto 12px}@keyframes s{to{transform:rotate(360deg)}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);margin-bottom:8px}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.whatif{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}.whatif input[type=range]{width:100%}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}.result div{background:#faf9f7;border-radius:8px;padding:10px}.result .l{font-size:11px;color:var(--ink2)}.result .v{font-size:18px;font-weight:700}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}pre{background:#14122b;color:#e8e6ff;padding:12px;border-radius:8px;overflow:auto}
+a{color:var(--violet)}.small{font-size:12px;color:var(--ink2)}.btn{background:var(--violet);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:13px}.btn.ghost{background:#fff;color:var(--violet);border:1px solid var(--violet)}
+footer{padding:18px 28px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
+.callout{border-left:4px solid var(--violet);background:#f4f2ff;padding:10px 14px;border-radius:6px;font-size:13px;margin:8px 0 14px}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>FORESIGHT <span>· Demand &amp; Inventory Intelligence</span></h1><div class="sub">NorthBay Living · planning dashboard · forecast origin <b id="origin">…</b> · 8-week horizon</div></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge" id="b-wape">Backtest WAPE …</span><span class="badge" id="b-api">API: /api/score</span><span class="badge">Zidio Development · Data Science</span></div>
+</header>
+<nav id="nav">
+  <button data-tab="overview" class="active">Overview</button><button data-tab="actions">Reorder &amp; markdown list</button><button data-tab="explorer">Forecast explorer &amp; what-if</button><button data-tab="model">Model accuracy</button><button data-tab="quality">Data quality</button><button data-tab="api">Scoring API</button>
+</nav>
+<main>
+  <div id="loading" class="loading"><div class="spin"></div>Loading forecast, risk scores and inventory position…</div>
+  <div id="error" class="empty" style="display:none"></div>
+  <div id="app" style="display:none">
+    <div class="filters">
+      <label class="f">Category<select id="f-cat"><option value="">All categories</option></select></label>
+      <label class="f">Quadrant<select id="f-quad"><option value="">All quadrants</option><option>Reorder now</option><option>Markdown / clear</option><option>Watch / volatile</option><option>Healthy</option></select></label>
+      <label class="f">Search SKU<input type="search" id="f-q" placeholder="SKU012 or Product 012"></label>
+      <span class="small" id="f-count"></span>
+    </div>
+
+    <section class="tab active" id="tab-overview">
+      <div class="kpis" id="kpis"></div>
+      <div class="grid">
+        <div class="card c7"><h3>Decisioning view — where every SKU sits</h3><div class="d">Stockout risk (up) vs overstock risk (right). Bubble size = rupees at stake. Hover for detail; the four quadrants map directly to actions.</div>
+          <div class="legend"><span><i style="background:var(--red)"></i>Reorder now</span><span><i style="background:var(--purple)"></i>Markdown / clear</span><span><i style="background:var(--yellow)"></i>Watch / volatile</span><span><i style="background:var(--green)"></i>Healthy</span></div>
+          <div class="chart tall"><canvas id="ch-grid"></canvas></div></div>
+        <div class="card c5"><h3>Rupee impact by category</h3><div class="d">Sales at risk from stockouts (red) and capital locked in overstock (purple), ₹ lakh.</div><div class="chart"><canvas id="ch-cat"></canvas></div>
+          <h3 style="margin-top:14px">Top priorities right now</h3><div class="d">Ranked by value at stake.</div><div id="top-actions"></div></div>
+        <div class="card"><h3>Total weekly demand — history and seasonality</h3><div class="d">All SKUs, units per week. Demand peaks in March and troughs in October, ~50% swing. December weeks show forecast vs actual.</div><div class="chart short"><canvas id="ch-total"></canvas></div></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-actions">
+      <div class="grid">
+        <div class="card c6"><h3>Reorder list</h3><div class="d">SKUs likely to run out before a replenishment lands. Quantity = demand over lead time + 4-week review + safety stock − position.</div><div id="t-reorder"></div></div>
+        <div class="card c6"><h3>Markdown / clearance list</h3><div class="d">SKUs holding well beyond 8 weeks of forecast demand. Locked capital = excess units × unit cost.</div><div id="t-markdown"></div></div>
+        <div class="card"><h3>All SKUs — full risk table</h3><div class="d">Click a header to sort. Respects the filters above. <button class="btn ghost" id="dl-csv" style="padding:4px 10px;margin-left:8px">Download CSV</button></div><div id="t-all"></div></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-explorer">
+      <div class="grid">
+        <div class="card c8"><h3 id="ex-title">SKU forecast</h3><div class="d" id="ex-sub"></div>
+          <div class="legend"><span><i style="background:#0b0b0b"></i>Actual</span><span><i style="background:var(--blue)"></i>FORESIGHT forecast</span><span><i style="background:rgba(42,120,214,.25)"></i>80% interval</span><span><i style="background:var(--orange)"></i>Seasonal-naive baseline</span></div>
+          <div class="chart tall"><canvas id="ch-sku"></canvas></div></div>
+        <div class="card c4"><h3>Select SKU</h3><div class="d">Filtered by category / search above.</div><select id="ex-sku" size="12" style="width:100%;min-width:0"></select>
+          <div id="ex-facts" style="margin-top:12px"></div></div>
+        <div class="card"><h3>What-if: change the inventory position and see the risk move</h3><div class="d">Same formula as the batch scoring — transparent and instant. Reset returns to the client's latest snapshot.</div>
+          <div class="whatif">
+            <label class="f">Lead time (days): <b id="w-lt-v"></b><input type="range" id="w-lt" min="1" max="60" step="1"></label>
+            <label class="f">On hand (units)<input type="number" id="w-oh" min="0"></label>
+            <label class="f">On order (units)<input type="number" id="w-oo" min="0"></label>
+            <label class="f">Safety stock (units)<input type="number" id="w-ss" min="0"></label>
+            <button class="btn ghost" id="w-reset">Reset to snapshot</button>
+          </div>
+          <div class="result" id="w-result"></div>
+          <div class="callout" id="w-explain"></div></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-model">
+      <div class="kpis" id="m-kpis"></div>
+      <div class="grid">
+        <div class="card c6"><h3>Rolling-origin backtest — WAPE by fold</h3><div class="d">Six forecast origins in 2025, each scored on the next 8 weeks it had never seen. Lower is better.</div><div class="chart"><canvas id="ch-fold"></canvas></div></div>
+        <div class="card c6"><h3>WAPE by horizon (weeks ahead)</h3><div class="d">Accuracy degrades gently with distance; the model stays ahead of the baseline at every horizon.</div><div class="chart"><canvas id="ch-h"></canvas></div></div>
+        <div class="card c6"><h3>WAPE by category</h3><div class="chart"><canvas id="ch-mcat"></canvas></div></div>
+        <div class="card c6"><h3>What drives the forecast</h3><div class="d">Share of LightGBM gain. Recent level (lags/rolling means) and last year's same week dominate; promotions and calendar refine it.</div><div class="chart"><canvas id="ch-imp"></canvas></div></div>
+        <div class="card"><h3>How to read the accuracy honestly</h3><div id="m-notes" class="small"></div></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-quality">
+      <div class="grid">
+        <div class="card"><h3>Data-quality log — every issue found and how the pipeline handled it</h3><div class="d">Generated automatically by <code>src/pipeline.py</code>; nothing was fixed by hand.</div><div id="dq"></div></div>
+        <div class="card"><h3>Pipeline summary</h3><div id="dq-sum" class="small"></div></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-api">
+      <div class="grid">
+        <div class="card c6"><h3>Scoring service — inputs &amp; outputs</h3>
+          <p>Returns the 8-week forecast (mean, 80% interval, seasonal-naive) and the risk assessment for one SKU or a batch. Optional overrides re-score with a different inventory position.</p>
+          <pre>GET  /api/health
+GET  /api/score?sku=SKU012
+GET  /api/score?sku=SKU012&amp;lead_time_days=21&amp;on_hand=30
+GET  /api/score?sku=SKU012,SKU020,SKU026
+GET  /api/score?all=true
+POST /api/score   {"skus":["SKU012","SKU020"],
+                   "overrides":{"lead_time_days":14}}</pre>
+          <p class="small">Errors are explicit JSON with HTTP 400/404/405 — never a crash: unknown SKU, non-numeric override, empty request, bad JSON body.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><input type="search" id="api-sku" value="SKU012" style="min-width:120px"><input type="number" id="api-lt" placeholder="lead_time_days" style="min-width:140px"><button class="btn" id="api-go">Try it live</button></div></div>
+        <div class="card c6"><h3>Live response</h3><pre id="api-out" style="max-height:520px">Click “Try it live”.</pre></div>
+      </div>
+    </section>
+  </div>
+</main>
+<footer>Project FORESIGHT · Zidio Development Data Science &amp; Analytics internship · built by Eswar Mahalingam · data: simulated NorthBay Living extracts (Jan-2024 → Dec-2025) · model: LightGBM direct multi-horizon, rolling-origin backtested vs seasonal-naive · all numbers regenerate with <code>python src/run_all.py</code></footer>
+
+<script type="module">
+import { scoreSku } from "./risk_engine.js";
+const $ = (s) => document.querySelector(s);
+const fmtINR = (v) => v >= 1e7 ? `₹${(v/1e7).toFixed(2)} Cr` : v >= 1e5 ? `₹${(v/1e5).toFixed(1)} L` : `₹${Math.round(v).toLocaleString("en-IN")}`;
+const pct = (v, d = 1) => `${(100 * v).toFixed(d)}%`;
+const QC = { "Reorder now": "#e34948", "Markdown / clear": "#4a3aa7", "Watch / volatile": "#eda100", "Healthy": "#008300" };
+const qcls = (q) => "pill q-" + q.split(" ")[0];
+Chart.defaults.font.family = "Inter, system-ui, sans-serif"; Chart.defaults.color = "#52514e"; Chart.defaults.borderColor = "#e6e6e3";
+let D, charts = {}, state = { cat: "", quad: "", q: "", sku: null, sort: { k: "value_at_stake_inr", dir: -1 } };
+
+async function boot() {
+  try {
+    const r = await fetch("data/dashboard.json"); if (!r.ok) throw new Error("HTTP " + r.status);
+    D = await r.json();
+  } catch (e) {
+    $("#loading").style.display = "none"; $("#error").style.display = "block";
+    $("#error").innerHTML = `Could not load <code>data/dashboard.json</code> (${e.message}). Run <code>python src/run_all.py</code> to regenerate it, then redeploy.`; return;
+  }
+  $("#loading").style.display = "none"; $("#app").style.display = "block";
+  $("#origin").textContent = D.meta.origin;
+  $("#b-wape").textContent = `Backtest WAPE ${pct(D.metrics.overall.wape_model)} vs naive ${pct(D.metrics.overall.wape_naive)}`;
+  D.categories.forEach((c) => $("#f-cat").insertAdjacentHTML("beforeend", `<option>${c}</option>`));
+  ["#f-cat", "#f-quad"].forEach((s) => $(s).addEventListener("change", () => { state[s === "#f-cat" ? "cat" : "quad"] = $(s).value; render(); }));
+  $("#f-q").addEventListener("input", () => { state.q = $("#f-q").value.trim().toLowerCase(); render(); });
+  $("#nav").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("nav button").forEach((x) => x.classList.toggle("active", x === b)); document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.id === "tab-" + b.dataset.tab)); });
+  $("#dl-csv").addEventListener("click", downloadCsv);
+  $("#api-go").addEventListener("click", tryApi);
+  ["#w-lt", "#w-oh", "#w-oo", "#w-ss"].forEach((s) => $(s).addEventListener("input", whatIf));
+  $("#w-reset").addEventListener("click", () => selectSku(state.sku));
+  $("#ex-sku").addEventListener("change", () => selectSku($("#ex-sku").value));
+  renderModel(); renderQuality(); render();
+}
+
+function filtered() {
+  return D.skus.filter((s) => (!state.cat || s.category === state.cat) && (!state.quad || s.quadrant === state.quad) &&
+    (!state.q || s.sku_id.toLowerCase().includes(state.q) || s.product_name.toLowerCase().includes(state.q)));
+}
+
+function render() {
+  const rows = filtered();
+  $("#f-count").textContent = `${rows.length} of ${D.skus.length} SKUs shown`;
+  renderKpis(rows); renderGrid(rows); renderCat(rows); renderTop(rows); renderTotal(); renderTables(rows); renderExplorerList(rows);
+}
+
+function renderKpis(rows) {
+  const sum = (k) => rows.reduce((a, s) => a + s[k], 0), n = (q) => rows.filter((s) => s.quadrant === q).length;
+  $("#kpis").innerHTML = [
+    ["Sales at risk (lead time)", fmtINR(sum("sales_at_risk_inr")), `${n("Reorder now")} SKUs to reorder now`, "red"],
+    ["Capital locked in overstock", fmtINR(sum("locked_capital_inr")), `${n("Markdown / clear")} markdown candidates`, "purple"],
+    ["Healthy SKUs", `${n("Healthy")} / ${rows.length}`, `${n("Watch / volatile")} to watch`, "green"],
+    ["Inventory on hand (at cost)", fmtINR(sum("inventory_value_inr")), "latest snapshot " + D.meta.origin, "blue"],
+    ["Forecast accuracy (backtest)", pct(D.metrics.overall.wape_model), `WAPE · baseline ${pct(D.metrics.overall.wape_naive)} · ${D.metrics.overall.improvement_pct.toFixed(0)}% better`, ""],
+  ].map(([l, v, s, c]) => `<div class="kpi ${c}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+
+function mk(id, cfg) { if (charts[id]) charts[id].destroy(); charts[id] = new Chart($("#" + id), cfg); }
+
+function renderGrid(rows) {
+  if (!rows.length) { if (charts["ch-grid"]) charts["ch-grid"].destroy(); $("#ch-grid").parentElement.innerHTML = '<div class="empty">No SKUs match the current filters.</div>'; return; }
+  if (!$("#ch-grid")) $(".chart.tall").innerHTML = '<canvas id="ch-grid"></canvas>';
+  const max = Math.max(...D.skus.map((s) => s.value_at_stake_inr), 1);
+  const ds = Object.keys(QC).map((q) => ({ label: q, backgroundColor: QC[q] + "bb", borderColor: "#fff", borderWidth: 1,
+    data: rows.filter((s) => s.quadrant === q).map((s, i) => ({ x: Math.min(1, s.overstock_score + (i % 5) * 0.004), y: Math.min(1, s.stockout_score - (i % 5) * 0.004), r: 5 + 22 * Math.sqrt(s.value_at_stake_inr / max), s })) }));
+  mk("ch-grid", { type: "bubble", data: { datasets: ds }, options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => { const s = c.raw.s; return [` ${s.sku_id} · ${s.product_name} (${s.category})`, ` stockout ${s.stockout_score} · overstock ${s.overstock_score}`, ` on hand ${s.on_hand} + on order ${s.on_order} · ${s.weeks_of_cover} wks cover`, ` at stake ${fmtINR(s.value_at_stake_inr)} → ${s.quadrant}`]; } } } },
+    scales: { x: { min: -0.05, max: 1.05, title: { display: true, text: "Overstock risk →" }, grid: { color: (c) => c.tick.value === 0.5 ? "#9a9992" : "#eeeeeb" } }, y: { min: -0.05, max: 1.05, title: { display: true, text: "Stockout risk →" }, grid: { color: (c) => c.tick.value === 0.5 ? "#9a9992" : "#eeeeeb" } } },
+    onClick: (e, els) => { if (els.length) { const s = ds[els[0].datasetIndex].data[els[0].index].s; document.querySelector('[data-tab="explorer"]').click(); selectSku(s.sku_id); } } } });
+}
+
+function renderCat(rows) {
+  const cats = D.categories, agg = (k) => cats.map((c) => rows.filter((s) => s.category === c).reduce((a, s) => a + s[k], 0) / 1e5);
+  mk("ch-cat", { type: "bar", data: { labels: cats, datasets: [{ label: "Sales at risk", data: agg("sales_at_risk_inr"), backgroundColor: "#e34948", borderRadius: 4 }, { label: "Locked capital", data: agg("locked_capital_inr"), backgroundColor: "#4a3aa7", borderRadius: 4 }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (c) => ` ${c.dataset.label}: ₹${c.raw.toFixed(1)} L` } } }, scales: { y: { title: { display: true, text: "₹ lakh" }, beginAtZero: true } } } });
+}
+
+function renderTop(rows) {
+  const top = [...rows].filter((s) => s.quadrant !== "Healthy").sort((a, b) => b.value_at_stake_inr - a.value_at_stake_inr).slice(0, 6);
+  $("#top-actions").innerHTML = top.length ? `<table><tr><th>SKU</th><th>Action</th><th class="num">₹ at stake</th></tr>${top.map((s) => `<tr><td><b>${s.sku_id}</b><br><span class="small">${s.category}</span></td><td><span class="${qcls(s.quadrant)}">${s.quadrant}</span><br><span class="small">${s.action}</span></td><td class="num">${fmtINR(s.value_at_stake_inr)}</td></tr>`).join("")}</table>` : '<div class="empty">Nothing to action in this selection — all healthy.</div>';
+}
+
+function renderTotal() {
+  const h = D.total_history, fw = D.skus[0].forecast.weeks;
+  const fsum = (k) => fw.map((_, i) => D.skus.reduce((a, s) => a + (s.forecast[k][i] ?? 0), 0));
+  const act = fw.map((_, i) => D.skus.every((s) => s.forecast.actual[i] != null) ? D.skus.reduce((a, s) => a + s.forecast.actual[i], 0) : null);
+  const labels = [...h.weeks, ...fw], pad = (a) => [...Array(h.weeks.length).fill(null), ...a];
+  mk("ch-total", { type: "line", data: { labels, datasets: [
+    { label: "Actual", data: [...h.units, ...act], borderColor: "#0b0b0b", borderWidth: 1.8, pointRadius: (c) => c.dataIndex >= h.weeks.length ? 4 : 0, tension: .2 },
+    { label: "Forecast", data: pad(fsum("mean")), borderColor: "#2a78d6", borderWidth: 2.2, pointRadius: 0, tension: .2 },
+    { label: "80% hi", data: pad(fsum("hi80")), borderColor: "transparent", backgroundColor: "rgba(42,120,214,.15)", fill: "+1", pointRadius: 0 },
+    { label: "80% lo", data: pad(fsum("lo80")), borderColor: "transparent", pointRadius: 0 },
+    { label: "Seasonal-naive", data: pad(fsum("naive")), borderColor: "#eb6834", borderDash: [5, 4], borderWidth: 1.6, pointRadius: 0 }] },
+    options: { maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { position: "bottom", labels: { filter: (l) => !l.text.startsWith("80% ") } } }, scales: { x: { ticks: { maxTicksLimit: 14, callback: (v, i) => labels[i].slice(2) } }, y: { title: { display: true, text: "units / week" } } } } });
+}
+
+function tableHtml(rows, cols, sortable) {
+  if (!rows.length) return '<div class="empty">No SKUs in this list for the current filters.</div>';
+  const sk = state.sort;
+  if (sortable) rows = [...rows].sort((a, b) => (a[sk.k] > b[sk.k] ? 1 : a[sk.k] < b[sk.k] ? -1 : 0) * sk.dir);
+  return `<div class="tbl"><table><thead><tr>${cols.map((c) => `<th ${sortable ? `data-k="${c.k}"` : ""} class="${c.num ? "num" : ""}">${c.h}${sortable && sk.k === c.k ? (sk.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("")}</tr></thead><tbody>${rows.map((s) => `<tr>${cols.map((c) => `<td class="${c.num ? "num" : ""}">${c.f ? c.f(s) : s[c.k]}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+const skuCell = (s) => `<b>${s.sku_id}</b><br><span class="small">${s.product_name} · ${s.category}</span>`;
+function renderTables(rows) {
+  $("#t-reorder").innerHTML = tableHtml(rows.filter((s) => s.quadrant === "Reorder now").sort((a, b) => b.sales_at_risk_inr - a.sales_at_risk_inr),
+    [{ h: "SKU", f: skuCell }, { h: "On hand", k: "on_hand", num: 1 }, { h: "Days left", k: "days_of_stock_on_hand", num: 1 }, { h: "Lead time", f: (s) => s.lead_time_days + "d", num: 1 }, { h: "Order qty", f: (s) => `<b>${s.reorder_qty}</b>`, num: 1 }, { h: "Sales at risk", f: (s) => fmtINR(s.sales_at_risk_inr), num: 1 }]);
+  $("#t-markdown").innerHTML = tableHtml(rows.filter((s) => s.quadrant === "Markdown / clear").sort((a, b) => b.locked_capital_inr - a.locked_capital_inr),
+    [{ h: "SKU", f: skuCell }, { h: "On hand + order", f: (s) => s.on_hand + " + " + s.on_order, num: 1 }, { h: "Weeks cover", k: "weeks_of_cover", num: 1 }, { h: "Excess units", f: (s) => Math.round(s.units_excess), num: 1 }, { h: "Locked capital", f: (s) => fmtINR(s.locked_capital_inr), num: 1 }, { h: "Margin", f: (s) => s.margin_flag === "negative" ? '<span class="pill q-Reorder">negative</span>' : "ok" }]);
+  $("#t-all").innerHTML = tableHtml(rows, [{ h: "Priority", k: "priority", num: 1 }, { h: "SKU", k: "sku_id", f: skuCell }, { h: "Quadrant", k: "quadrant", f: (s) => `<span class="${qcls(s.quadrant)}">${s.quadrant}</span>` }, { h: "Stockout", k: "stockout_score", num: 1 }, { h: "Overstock", k: "overstock_score", num: 1 }, { h: "On hand", k: "on_hand", num: 1 }, { h: "On order", k: "on_order", num: 1 }, { h: "Avg wk fcst", k: "avg_weekly_forecast", num: 1 }, { h: "8-wk demand", k: "demand_8w", num: 1 }, { h: "Wks cover", k: "weeks_of_cover", num: 1 }, { h: "₹ at stake", k: "value_at_stake_inr", f: (s) => fmtINR(s.value_at_stake_inr), num: 1 }, { h: "Action", k: "action", f: (s) => `<span class="small">${s.action}</span>` }], true);
+  $("#t-all").querySelectorAll("th[data-k]").forEach((th) => th.addEventListener("click", () => { const k = th.dataset.k; state.sort = { k, dir: state.sort.k === k ? -state.sort.dir : -1 }; renderTables(filtered()); }));
+}
+
+function renderExplorerList(rows) {
+  const sel = $("#ex-sku"); sel.innerHTML = rows.map((s) => `<option value="${s.sku_id}">${s.sku_id} · ${s.product_name} · ${s.quadrant}</option>`).join("");
+  if (!rows.length) { $("#ex-title").textContent = "No SKU selected"; $("#ex-sub").textContent = "Widen the filters to pick a SKU."; $("#ex-facts").innerHTML = '<div class="empty">No SKUs match.</div>'; if (charts["ch-sku"]) charts["ch-sku"].destroy(); $("#w-result").innerHTML = ""; return; }
+  selectSku(rows.some((s) => s.sku_id === state.sku) ? state.sku : rows[0].sku_id);
+}
+
+function selectSku(id) {
+  const s = D.skus.find((x) => x.sku_id === id); if (!s) return; state.sku = id; $("#ex-sku").value = id;
+  $("#ex-title").textContent = `${s.sku_id} · ${s.product_name} — ${s.category} / ${s.subcategory}`;
+  $("#ex-sub").textContent = `Last 26 weeks of actuals, then the 8-week forecast from ${D.meta.origin}. Dots after the origin are December actuals the model never saw.`;
+  const labels = [...s.history.weeks, ...s.forecast.weeks], n = s.history.weeks.length, pad = (a) => [...Array(n).fill(null), ...a];
+  mk("ch-sku", { type: "line", data: { labels, datasets: [
+    { label: "Actual", data: [...s.history.units, ...s.forecast.actual], borderColor: "#0b0b0b", borderWidth: 1.8, pointRadius: (c) => c.dataIndex >= n ? 4 : 0, pointBackgroundColor: "#0b0b0b", tension: .2, spanGaps: false },
+    { label: "Forecast", data: pad(s.forecast.mean), borderColor: "#2a78d6", borderWidth: 2.4, pointRadius: 2, tension: .2 },
+    { label: "80% hi", data: pad(s.forecast.hi80), borderColor: "transparent", backgroundColor: "rgba(42,120,214,.18)", fill: "+1", pointRadius: 0 },
+    { label: "80% lo", data: pad(s.forecast.lo80), borderColor: "transparent", pointRadius: 0 },
+    { label: "Seasonal-naive", data: pad(s.forecast.naive), borderColor: "#eb6834", borderDash: [5, 4], borderWidth: 1.6, pointRadius: 0 }] },
+    options: { maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { display: false } }, scales: { x: { ticks: { maxTicksLimit: 12, callback: (v, i) => labels[i].slice(5) } }, y: { title: { display: true, text: "units / week" }, beginAtZero: true } } } });
+  const f = (l, v) => `<tr><td class="small">${l}</td><td class="num"><b>${v}</b></td></tr>`;
+  $("#ex-facts").innerHTML = `<table>${f("Quadrant", `<span class="${qcls(s.quadrant)}">${s.quadrant}</span>`)}${f("Recommended action", `<span class="small">${s.action}</span>`)}${f("On hand / on order", `${s.on_hand} / ${s.on_order}`)}${f("Lead time · safety stock", `${s.lead_time_days} d · ${s.safety_stock}`)}${f("Avg weekly forecast", s.avg_weekly_forecast)}${f("Demand next 8 weeks", s.demand_8w)}${f("Weeks of cover", s.weeks_of_cover)}${f("Price · cost", `₹${s.list_price.toLocaleString("en-IN")} · ₹${s.unit_cost.toLocaleString("en-IN")}`)}${f("Margin flag", s.margin_flag)}</table>`;
+  $("#w-lt").value = s.lead_time_days; $("#w-oh").value = s.on_hand; $("#w-oo").value = s.on_order; $("#w-ss").value = s.safety_stock; whatIf();
+}
+
+function whatIf() {
+  const s = D.skus.find((x) => x.sku_id === state.sku); if (!s) return;
+  $("#w-lt-v").textContent = $("#w-lt").value;
+  const r = scoreSku({ onHand: $("#w-oh").value, onOrder: $("#w-oo").value, leadTimeDays: $("#w-lt").value, safetyStock: $("#w-ss").value, forecast: s.forecast.mean, sigma: s.forecast.sigma, listPrice: s.list_price, unitCost: s.unit_cost });
+  const cell = (l, v, c = "") => `<div><div class="l">${l}</div><div class="v" style="color:${c}">${v}</div></div>`;
+  $("#w-result").innerHTML = cell("Quadrant", `<span class="${qcls(r.quadrant)}" style="font-size:13px">${r.quadrant}</span>`) + cell("Stockout risk", r.stockout_score, r.stockout_score >= .5 ? "#e34948" : "") + cell("Overstock risk", r.overstock_score, r.overstock_score >= .5 ? "#4a3aa7" : "") + cell("Demand in lead time", r.demand_lead_time) + cell("Weeks of cover", r.weeks_of_cover) + cell("Suggested order", r.reorder_qty) + cell("Sales at risk", fmtINR(r.sales_at_risk_inr), "#e34948") + cell("Locked capital", fmtINR(r.locked_capital_inr), "#4a3aa7");
+  $("#w-explain").innerHTML = `<b>Why:</b> over a ${$("#w-lt").value}-day lead time we expect to sell <b>${r.demand_lead_time}</b> units against <b>${$("#w-oh").value}</b> on hand → probability stock runs out before the open order lands = <b>${pct(r.p_stockout_lead_time, 0)}</b>; probability the position (on hand + on order − safety stock) is already below the reorder point = <b>${pct(r.p_below_reorder_point, 0)}</b>. Cover of <b>${r.weeks_of_cover}</b> weeks vs the 8-week horizon gives overstock <b>${r.overstock_score}</b>. → <b>${r.action}</b>.`;
+}
+
+function renderModel() {
+  const o = D.metrics.overall, h = D.metrics.holdout;
+  $("#m-kpis").innerHTML = [["Model WAPE (backtest)", pct(o.wape_model), `${D.metrics.n_folds} folds × 8 weeks`, "blue"], ["Seasonal-naive WAPE", pct(o.wape_naive), "the bar to beat", ""], ["Improvement", `${o.improvement_pct.toFixed(1)}%`, `model wins on ${D.metrics.skus_model_beats_naive}/${D.meta.skus} SKUs`, "green"], ["Bias", `${(100 * o.bias_model).toFixed(1)}%`, "≈0 → no systematic over/under-forecast", ""], ["Dec-2025 holdout WAPE", pct(h.wape_model), `naive ${pct(h.wape_naive)} · 80% interval covered ${pct(h.coverage80, 0)}`, "blue"]]
+    .map(([l, v, s, c]) => `<div class="kpi ${c}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+  const line = (id, labels, m, nv, xt) => mk(id, { type: "line", data: { labels, datasets: [{ label: "LightGBM model", data: m.map((v) => 100 * v), borderColor: "#2a78d6", borderWidth: 2.2, pointRadius: 4 }, { label: "Seasonal-naive", data: nv.map((v) => 100 * v), borderColor: "#9a9992", borderDash: [5, 4], borderWidth: 2, pointRadius: 4 }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true, title: { display: true, text: "WAPE %" } }, x: { title: { display: true, text: xt } } } } });
+  line("ch-fold", D.metrics.by_fold.map((f) => f.origin), D.metrics.by_fold.map((f) => f.wape_model), D.metrics.by_fold.map((f) => f.wape_naive), "forecast origin");
+  line("ch-h", D.metrics.by_horizon.map((f) => "wk " + f.h), D.metrics.by_horizon.map((f) => f.wape_model), D.metrics.by_horizon.map((f) => f.wape_naive), "weeks ahead");
+  mk("ch-mcat", { type: "bar", data: { labels: D.metrics.by_category.map((c) => c.category), datasets: [{ label: "LightGBM", data: D.metrics.by_category.map((c) => 100 * c.wape_model), backgroundColor: "#2a78d6", borderRadius: 4 }, { label: "Seasonal-naive", data: D.metrics.by_category.map((c) => 100 * c.wape_naive), backgroundColor: "#c3c2b7", borderRadius: 4 }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true, title: { display: true, text: "WAPE %" } } } } });
+  mk("ch-imp", { type: "bar", data: { labels: D.feature_importance.map((f) => f.feature), datasets: [{ data: D.feature_importance.map((f) => 100 * f.share), backgroundColor: "#2a78d6", borderRadius: 4 }] }, options: { indexAxis: "y", maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: "share of gain %" } } } } });
+  $("#m-notes").innerHTML = `<p><b>WAPE</b> = total absolute error ÷ total actual units. ${pct(o.wape_model)} means that, summed over all SKUs and weeks, the forecast misses by about ${(100 * o.wape_model).toFixed(0)} units per 100 sold. It is robust to the low-volume SKUs where MAPE explodes (MAPE here: model ${pct(o.mape_model)} vs naive ${pct(o.mape_naive)}).</p>
+  <p><b>Rolling-origin backtest</b>: the model is retrained at six past dates using only data before each date, then scored on the following 8 weeks. This is how a real forecast is used — no random splits, no future data in any feature. Promotions and holidays of the target week are used because they are planned in advance.</p>
+  <p><b>Limitations</b>: two years of history means the seasonal signal rests on one prior cycle; new-SKU behaviour is inferred from category peers; the interval assumes errors behave like the backtest errors; inventory is a monthly snapshot, so on-hand between snapshots is approximated. Retrain monthly and watch the WAPE — if it drifts above the seasonal-naive line, revert to the baseline and investigate.</p>`;
+}
+
+function renderQuality() {
+  const dq = D.data_quality;
+  $("#dq").innerHTML = `<div class="tbl" style="max-height:none"><table><thead><tr><th>Table</th><th>Issue found</th><th class="num">Count</th><th>How handled</th><th>Rationale</th></tr></thead><tbody>${dq.issues.map((i) => `<tr><td><code>${i.table}</code></td><td>${i.issue}</td><td class="num">${i.count ?? "—"}</td><td>${i.action}</td><td class="small">${i.rationale}</td></tr>`).join("")}</tbody></table></div>`;
+  const s = dq.summary;
+  $("#dq-sum").innerHTML = `<b>${s.skus}</b> SKUs × <b>${s.weeks}</b> complete weeks (${s.first_week} → ${s.last_week}); ${s.total_units.toLocaleString("en-IN")} units, ${fmtINR(s.total_revenue)} revenue. Forecast origin <b>${s.forecast_origin}</b> with <b>${s.holdout_weeks}</b> holdout weeks. <b>${s.unmapped_inventory_skus}</b> inventory SKUs (SKU051–SKU200) have no sales history at all — <b>${fmtINR(s.unmapped_inventory_value_latest)}</b> of stock value the client cannot currently sell through or has not mapped; raised as a finding, not silently dropped.`;
+}
+
+function downloadCsv() {
+  const rows = filtered(), cols = ["priority", "sku_id", "product_name", "category", "quadrant", "action", "stockout_score", "overstock_score", "on_hand", "on_order", "lead_time_days", "safety_stock", "avg_weekly_forecast", "demand_8w", "weeks_of_cover", "reorder_qty", "sales_at_risk_inr", "locked_capital_inr", "value_at_stake_inr"];
+  const csv = [cols.join(","), ...rows.map((s) => cols.map((c) => `"${String(s[c]).replace(/"/g, '""')}"`).join(","))].join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "foresight_risk_scores.csv"; a.click();
+}
+
+async function tryApi() {
+  const sku = $("#api-sku").value.trim(), lt = $("#api-lt").value; const url = `/api/score?sku=${encodeURIComponent(sku)}${lt ? `&lead_time_days=${lt}` : ""}`;
+  $("#api-out").textContent = `GET ${url}\n\nloading…`;
+  try { const r = await fetch(url); const t = await r.text(); $("#api-out").textContent = `GET ${url}\nHTTP ${r.status}\n\n${t}`; }
+  catch (e) { $("#api-out").textContent = `GET ${url}\n\nThe API is only reachable on the deployed Netlify site (serverless function). Locally, run: netlify dev\n\n${e.message}`; }
+}
+boot();
+</script>
+</body>
+</html>

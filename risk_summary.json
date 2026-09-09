@@ -1,0 +1,181 @@
+{
+  "skus": 50,
+  "quadrant_counts": {
+    "Healthy": 34,
+    "Markdown / clear": 8,
+    "Reorder now": 8
+  },
+  "sales_at_risk_inr": 4788726.0,
+  "locked_capital_inr": 14766060.0,
+  "inventory_value_inr": 51240267.0,
+  "reorder_list": [
+    {
+      "sku_id": "SKU012",
+      "product_name": "Product 012",
+      "category": "Home Decor",
+      "reorder_qty": 919,
+      "sales_at_risk_inr": 2054665.0,
+      "days_of_stock_on_hand": 1.9
+    },
+    {
+      "sku_id": "SKU017",
+      "product_name": "Product 017",
+      "category": "Home Decor",
+      "reorder_qty": 506,
+      "sales_at_risk_inr": 1083202.0,
+      "days_of_stock_on_hand": 7.5
+    },
+    {
+      "sku_id": "SKU031",
+      "product_name": "Product 031",
+      "category": "Furniture",
+      "reorder_qty": 617,
+      "sales_at_risk_inr": 993183.0,
+      "days_of_stock_on_hand": 5.2
+    },
+    {
+      "sku_id": "SKU042",
+      "product_name": "Product 042",
+      "category": "Home Decor",
+      "reorder_qty": 559,
+      "sales_at_risk_inr": 323079.0,
+      "days_of_stock_on_hand": 4.2
+    },
+    {
+      "sku_id": "SKU040",
+      "product_name": "Product 040",
+      "category": "Storage",
+      "reorder_qty": 512,
+      "sales_at_risk_inr": 133044.0,
+      "days_of_stock_on_hand": 4.8
+    },
+    {
+      "sku_id": "SKU034",
+      "product_name": "Product 034",
+      "category": "Lighting",
+      "reorder_qty": 536,
+      "sales_at_risk_inr": 87590.0,
+      "days_of_stock_on_hand": 1.8
+    },
+    {
+      "sku_id": "SKU010",
+      "product_name": "Product 010",
+      "category": "Storage",
+      "reorder_qty": 519,
+      "sales_at_risk_inr": 75057.0,
+      "days_of_stock_on_hand": 5.3
+    },
+    {
+      "sku_id": "SKU023",
+      "product_name": "Product 023",
+      "category": "Kitchen",
+      "reorder_qty": 418,
+      "sales_at_risk_inr": 38906.0,
+      "days_of_stock_on_hand": 9.3
+    }
+  ],
+  "markdown_list": [
+    {
+      "sku_id": "SKU020",
+      "product_name": "Product 020",
+      "category": "Storage",
+      "units_excess": 646.7,
+      "locked_capital_inr": 4332746.0,
+      "weeks_of_cover": 15.3
+    },
+    {
+      "sku_id": "SKU006",
+      "product_name": "Product 006",
+      "category": "Furniture",
+      "units_excess": 490.6,
+      "locked_capital_inr": 2954425.0,
+      "weeks_of_cover": 19.1
+    },
+    {
+      "sku_id": "SKU011",
+      "product_name": "Product 011",
+      "category": "Furniture",
+      "units_excess": 881.7,
+      "locked_capital_inr": 1515199.0,
+      "weeks_of_cover": 58.3
+    },
+    {
+      "sku_id": "SKU036",
+      "product_name": "Product 036",
+      "category": "Furniture",
+      "units_excess": 262.3,
+      "locked_capital_inr": 1424428.0,
+      "weeks_of_cover": 16.2
+    },
+    {
+      "sku_id": "SKU025",
+      "product_name": "Product 025",
+      "category": "Storage",
+      "units_excess": 1047.8,
+      "locked_capital_inr": 1396853.0,
+      "weeks_of_cover": 69.1
+    },
+    {
+      "sku_id": "SKU015",
+      "product_name": "Product 015",
+      "category": "Storage",
+      "units_excess": 243.8,
+      "locked_capital_inr": 1326487.0,
+      "weeks_of_cover": 18.4
+    },
+    {
+      "sku_id": "SKU004",
+      "product_name": "Product 004",
+      "category": "Lighting",
+      "units_excess": 281.3,
+      "locked_capital_inr": 406624.0,
+      "weeks_of_cover": 17.7
+    },
+    {
+      "sku_id": "SKU050",
+      "product_name": "Product 050",
+      "category": "Storage",
+      "units_excess": 541.6,
+      "locked_capital_inr": 380120.0,
+      "weeks_of_cover": 21.9
+    }
+  ],
+  "by_category": [
+    {
+      "category": "Furniture",
+      "skus": 10,
+      "sales_at_risk_inr": 993183.0,
+      "locked_capital_inr": 6204299.0
+    },
+    {
+      "category": "Home Decor",
+      "skus": 10,
+      "sales_at_risk_inr": 3460946.0,
+      "locked_capital_inr": 122524.0
+    },
+    {
+      "category": "Kitchen",
+      "skus": 10,
+      "sales_at_risk_inr": 38906.0,
+      "locked_capital_inr": 422144.0
+    },
+    {
+      "category": "Lighting",
+      "skus": 10,
+      "sales_at_risk_inr": 87590.0,
+      "locked_capital_inr": 580887.0
+    },
+    {
+      "category": "Storage",
+      "skus": 10,
+      "sales_at_risk_inr": 208101.0,
+      "locked_capital_inr": 7436206.0
+    }
+  ],
+  "thresholds": {
+    "quadrant": 0.5,
+    "overstock_cover_zero": 8,
+    "overstock_cover_full": 16,
+    "review_weeks": 4
+  }
+}

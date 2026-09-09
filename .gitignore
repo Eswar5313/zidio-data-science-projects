@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+outputs/model_lgbm.pkl
+outputs/backtest_predictions.csv
+data/raw/Stock_data.csv
+node_modules/
+.netlify/

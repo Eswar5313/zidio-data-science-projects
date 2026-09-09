@@ -1,0 +1,21 @@
+{
+  "peak_month": 3,
+  "trough_month": 10,
+  "peak_vs_trough_pct": 52.25607404550714,
+  "weekend_lift_pct": 24.862329465272804,
+  "promo_lift_pct": 38.12067723804762,
+  "holiday_effect_pct": -13.287805801801367,
+  "top10_revenue_share_pct": 47.729850468707774,
+  "bottom10_revenue_share_pct": 3.9861411183828444,
+  "dead_stock_candidates": [
+    "SKU028",
+    "SKU048",
+    "SKU010",
+    "SKU050",
+    "SKU011"
+  ],
+  "skus": 50,
+  "n_negative_margin": 16,
+  "negative_margin_revenue_share_pct": 16.69237227354079,
+  "top_sku": "SKU026"
+}
