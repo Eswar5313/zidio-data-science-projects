@@ -1,4 +1,19 @@
-# Project FORESIGHT — AI-Powered Demand & Inventory Intelligence
+<!-- ═══════════════ CAREER CONTROL TOWER · REPOSITORY · FORESIGHT ═══════════════ -->
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/headers/REPO_FORESIGHT.svg" width="100%" alt="Project FORESIGHT — Eswar Mahalingam" />
+
+<a href="https://github.com/Eswar5313"><img src="https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-000000?style=for-the-badge&labelColor=FFFFFF" alt="CAREER CONTROL TOWER"/></a> <a href="https://eswar5313.github.io/Eswar-Master-Project-Portfolio-2026/"><img src="https://img.shields.io/badge/✦-MASTER_PORTFOLIO-000000?style=for-the-badge&labelColor=C9CDD6" alt="MASTER PORTFOLIO"/></a> <a href="https://eswar5313.github.io/Eswar-Portfolio-Lens-Index-2026/"><img src="https://img.shields.io/badge/✦-LENS_INDEX-000000?style=for-the-badge&labelColor=FFFFFF" alt="LENS INDEX"/></a> <a href="https://foresight-northbay.netlify.app"><img src="https://img.shields.io/badge/✦-LIVE_DASHBOARD-000000?style=for-the-badge&labelColor=FFFFFF" alt="LIVE DASHBOARD"/></a> <a href="https://foresight-northbay.netlify.app/api/health"><img src="https://img.shields.io/badge/✦-SCORING_API-000000?style=for-the-badge&labelColor=C9CDD6" alt="SCORING API"/></a>
+
+<img src="https://img.shields.io/badge/WAPE-8.8%25_vs_11.2%25_NAIVE-FFFFFF?style=for-the-badge&labelColor=000000" alt="WAPE: 8.8% vs 11.2% NAIVE"/> <img src="https://img.shields.io/badge/HOLDOUT_WAPE-9.3%25-C9CDD6?style=for-the-badge&labelColor=000000" alt="HOLDOUT WAPE: 9.3%"/> <img src="https://img.shields.io/badge/SKU_WINS-49%2F50-FFFFFF?style=for-the-badge&labelColor=000000" alt="SKU WINS: 49/50"/> <img src="https://img.shields.io/badge/REORDER_NOW-8_SKUs-C9CDD6?style=for-the-badge&labelColor=000000" alt="REORDER NOW: 8 SKUs"/>
+
+**Zidio Development · Data Scientist (Data Science & Analytics) · 2026** — weekly SKU demand forecast · stockout early-warning · overstock flag · ops-ready dashboard + API
+
+</div>
+
+<img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/divider.svg" width="100%" alt="" />
+
+## Project FORESIGHT — AI-Powered Demand & Inventory Intelligence
 
 **Client:** NorthBay Living (D2C home & lifestyle) · **Program:** Zidio Development — Data Science & Analytics internship · **Author:** Eswar Mahalingam
 
@@ -14,7 +29,7 @@
 NorthBay stocks out of best-sellers and sits on slow movers because inventory is planned on gut feel. The brief asks for four things: a weekly SKU-level demand forecast that beats a naive baseline, a stockout early-warning, an overstock flag, and an interface a non-technical ops team can use without a data scientist in the room.
 
 ## 2. The data
-Four simulated extracts (`data/raw/`), Jan-2024 → Dec-2025:
+Four simulated extracts (repository root (`*.csv`)), Jan-2024 → Dec-2025:
 
 | Table | Grain | Rows |
 |---|---|---|
@@ -25,7 +40,7 @@ Four simulated extracts (`data/raw/`), Jan-2024 → Dec-2025:
 
 `Stock_data.csv` (an equity price file) was supplied alongside; it has no join key and is excluded.
 
-**Data-quality findings** (full log with rationale: `data/processed/data_quality_log.json`, also in the dashboard's *Data quality* tab): 150 inventory SKUs (SKU051–200, ₹17.5 Cr of stock) have no sales history at all; 21 SKUs have a launch date *after* their first sale; 16 SKUs are priced below cost; 40 category/subcategory pairs look inconsistent (e.g. Kitchen → Cushion); partial calendar weeks at the series edges. Sales itself had no duplicates, negatives or missing values. Every fix is coded, none is manual.
+**Data-quality findings** (full log with rationale: `data_quality_log.json`, also in the dashboard's *Data quality* tab): 150 inventory SKUs (SKU051–200, ₹17.5 Cr of stock) have no sales history at all; 21 SKUs have a launch date *after* their first sale; 16 SKUs are priced below cost; 40 category/subcategory pairs look inconsistent (e.g. Kitchen → Cushion); partial calendar weeks at the series edges. Sales itself had no duplicates, negatives or missing values. Every fix is coded, none is manual.
 
 ## 3. Setup & run (reproducible in one command)
 ```bash
@@ -46,7 +61,7 @@ Seeds are fixed (`SEED = 42`); re-running reproduces the headline numbers above.
 4. **Model** — LightGBM (Tweedie objective, direct multi-horizon: one row per SKU × origin × h). Training rows only ever see history ≤ origin.
 5. **Backtest** — rolling-origin CV: 6 origins in 2025, 4 weeks apart, each retrained from scratch and scored on the next 8 weeks. No random splits.
 6. **Intervals** — 80 % band from per-horizon backtest residual quantiles (stretch goal; calibrated at 79.5 % on holdout).
-7. **Risk** — transparent formulas (`src/risk.py`):
+7. **Risk** — transparent formulas (`risk.py`):
    - Stockout score = max( P[demand over lead time > on-hand], P[position − safety stock < demand over lead time] ) using forecast mean + calibrated sigma.
    - Overstock score = clip((weeks of cover − 8) / 8, 0, 1) → 0 at ≤ 8 weeks, 1 at ≥ 16.
    - Sales at risk = units short × price; locked capital = units beyond 8-week demand × cost; reorder qty = demand over (lead time + 4-week review) + safety stock − position.
@@ -60,7 +75,7 @@ Seeds are fixed (`SEED = 42`); re-running reproduces the headline numbers above.
 | Horizon 1 wk / 8 wk | 8.0 % / 9.6 % | 10.6 % / 12.1 % |
 | Dec-2025 holdout | **9.3 %** | 12.4 % |
 
-Top drivers by gain: SKU identity (52 % — each product's own level), `mean4` (27 %), `mean8` (12 %), `mean13`, `week_of_year`, `lag52_mean3` and `season` (the seasonal signal), then promo days. See `outputs/feature_importance.csv`.
+Top drivers by gain: SKU identity (52 % — each product's own level), `mean4` (27 %), `mean8` (12 %), `mean13`, `week_of_year`, `lag52_mean3` and `season` (the seasonal signal), then promo days. See `feature_importance.csv`.
 
 ## 6. Repository layout
 ```
@@ -96,7 +111,35 @@ Bad input never crashes: unknown SKU → 404, non-numeric/negative override → 
 ## 9. Monitoring plan (stretch)
 Retrain monthly on the new snapshot. Track WAPE of the last 4 weeks vs seasonal-naive; alert if the model loses to the baseline for 2 consecutive months or bias drifts beyond ±5 %. Track realised stockouts among "Healthy" SKUs as risk-precision feedback.
 
+## 🗂️ Files in this repository
+
+| Group | Files |
+|---|---|
+| 📄 Reports | [Project_Report_FORESIGHT.pdf](Project_Report_FORESIGHT.pdf) · [D2_EDA_Data_Quality_Memo.pdf](D2_EDA_Data_Quality_Memo.pdf) · [D7_Executive_Readout.pdf](D7_Executive_Readout.pdf) · [Video_Scripts_Demo_and_Feedback.pdf](Video_Scripts_Demo_and_Feedback.pdf) · [SUBMISSION.md](SUBMISSION.md) |
+| 📓 Notebooks | [01_eda.ipynb](01_eda.ipynb) · [02_baseline.ipynb](02_baseline.ipynb) · [03_model.ipynb](03_model.ipynb) |
+| 🐍 Pipeline | [run_all.py](run_all.py) · [pipeline.py](pipeline.py) · [eda.py](eda.py) · [forecast.py](forecast.py) · [risk.py](risk.py) · [export_web.py](export_web.py) · [build_reports.py](build_reports.py) · [main.py](main.py) · [test_foresight.py](test_foresight.py) · [Makefile](Makefile) |
+| 🌐 App & API | [index.html](index.html) (dashboard) · [risk_engine.js](risk_engine.js) · [score.mjs](score.mjs) · [streamlit_app.py](streamlit_app.py) · [netlify.toml](netlify.toml) |
+| 📊 Data & outputs | sales / SKU / calendar / inventory CSVs · [forecast.csv](forecast.csv) · [risk_scores.csv](risk_scores.csv) · [backtest_metrics.json](backtest_metrics.json) · [feature_importance.csv](feature_importance.csv) |
+| 🖼️ Charts | `01_weekly_demand.png` … `11_weeks_of_cover.png` · dashboard screenshots `dash_*.png` |
+
 ## 10. Deploying yourself
 - **Netlify (as deployed):** `netlify deploy --prod` from the repo root (publish dir `web/`, functions in `netlify/functions/`, config in `netlify.toml`).
-- **Streamlit Community Cloud:** new app → this repo → main file `app/streamlit_app.py`.
+- **Streamlit Community Cloud:** new app → this repo → main file `streamlit_app.py`.
 - **Render (FastAPI):** build `pip install -r requirements.txt`, start `uvicorn service.main:app --host 0.0.0.0 --port $PORT`.
+
+<img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/divider.svg" width="100%" alt="" />
+
+<div align="center">
+
+**Eswar Mahalingam** · B.Com · MBA · PGDLSCM · CSCMP SCPro · Six Sigma Black Belt
+Data Scientist @ Zidio Development · Ghaziabad NCR, India · Open to India · EU (Blue Card) · Gulf · Immediate joiner
+
+[![LinkedIn](https://img.shields.io/badge/✦-LINKEDIN-000000?style=for-the-badge&labelColor=C9CDD6)](https://linkedin.com/in/eswar-mahalingam)
+[![Email](https://img.shields.io/badge/✦-EMAIL-000000?style=for-the-badge&labelColor=FFFFFF)](mailto:eswarmba05313@gmail.com)
+[![Phone](https://img.shields.io/badge/✦-+91_9360548243-000000?style=for-the-badge&labelColor=C9CDD6)](tel:+919360548243)
+[![Portfolio](https://img.shields.io/badge/✦-PORTFOLIO_SITE-000000?style=for-the-badge&labelColor=FFFFFF)](https://eswar-3d-portfolio.netlify.app)
+[![Profile](https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-000000?style=for-the-badge&labelColor=FFFFFF)](https://github.com/Eswar5313)
+
+<img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/kailash-footer.svg" width="100%" alt="" />
+
+</div>
