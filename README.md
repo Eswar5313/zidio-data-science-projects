@@ -3,9 +3,9 @@
 
 <img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/headers/REPO_FORESIGHT.svg" width="100%" alt="Project FORESIGHT — Eswar Mahalingam" />
 
-<a href="https://github.com/Eswar5313"><img src="https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-000000?style=for-the-badge&labelColor=FFFFFF" alt="CAREER CONTROL TOWER"/></a> <a href="https://eswar5313.github.io/Eswar-Master-Project-Portfolio-2026/"><img src="https://img.shields.io/badge/✦-MASTER_PORTFOLIO-000000?style=for-the-badge&labelColor=C9CDD6" alt="MASTER PORTFOLIO"/></a> <a href="https://eswar5313.github.io/Eswar-Portfolio-Lens-Index-2026/"><img src="https://img.shields.io/badge/✦-LENS_INDEX-000000?style=for-the-badge&labelColor=FFFFFF" alt="LENS INDEX"/></a> <a href="https://foresight-northbay.netlify.app"><img src="https://img.shields.io/badge/✦-LIVE_DASHBOARD-000000?style=for-the-badge&labelColor=FFFFFF" alt="LIVE DASHBOARD"/></a> <a href="https://foresight-northbay.netlify.app/api/health"><img src="https://img.shields.io/badge/✦-SCORING_API-000000?style=for-the-badge&labelColor=C9CDD6" alt="SCORING API"/></a>
+<a href="https://github.com/Eswar5313"><img src="https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-0B1026?style=for-the-badge&labelColor=00E5FF" alt="CAREER CONTROL TOWER"/></a> <a href="https://eswar5313.github.io/Eswar-Master-Project-Portfolio-2026/"><img src="https://img.shields.io/badge/✦-MASTER_PORTFOLIO-0B1026?style=for-the-badge&labelColor=B388FF" alt="MASTER PORTFOLIO"/></a> <a href="https://eswar5313.github.io/Eswar-Portfolio-Lens-Index-2026/"><img src="https://img.shields.io/badge/✦-LENS_INDEX-0B1026?style=for-the-badge&labelColor=00E5FF" alt="LENS INDEX"/></a> <a href="https://foresight-northbay.netlify.app"><img src="https://img.shields.io/badge/✦-LIVE_DASHBOARD-0B1026?style=for-the-badge&labelColor=00E5FF" alt="LIVE DASHBOARD"/></a> <a href="https://foresight-northbay.netlify.app/api/health"><img src="https://img.shields.io/badge/✦-SCORING_API-0B1026?style=for-the-badge&labelColor=B388FF" alt="SCORING API"/></a>
 
-<img src="https://img.shields.io/badge/WAPE-8.8%25_vs_11.2%25_NAIVE-FFFFFF?style=for-the-badge&labelColor=000000" alt="WAPE: 8.8% vs 11.2% NAIVE"/> <img src="https://img.shields.io/badge/HOLDOUT_WAPE-9.3%25-C9CDD6?style=for-the-badge&labelColor=000000" alt="HOLDOUT WAPE: 9.3%"/> <img src="https://img.shields.io/badge/SKU_WINS-49%2F50-FFFFFF?style=for-the-badge&labelColor=000000" alt="SKU WINS: 49/50"/> <img src="https://img.shields.io/badge/REORDER_NOW-8_SKUs-C9CDD6?style=for-the-badge&labelColor=000000" alt="REORDER NOW: 8 SKUs"/>
+<img src="https://img.shields.io/badge/WAPE-8.8%25_vs_11.2%25_NAIVE-00E5FF?style=for-the-badge&labelColor=0B1026" alt="WAPE: 8.8% vs 11.2% NAIVE"/> <img src="https://img.shields.io/badge/HOLDOUT_WAPE-9.3%25-B388FF?style=for-the-badge&labelColor=0B1026" alt="HOLDOUT WAPE: 9.3%"/> <img src="https://img.shields.io/badge/SKU_WINS-49%2F50-00E5FF?style=for-the-badge&labelColor=0B1026" alt="SKU WINS: 49/50"/> <img src="https://img.shields.io/badge/REORDER_NOW-8_SKUs-B388FF?style=for-the-badge&labelColor=0B1026" alt="REORDER NOW: 8 SKUs"/>
 
 **Zidio Development · Data Scientist (Data Science & Analytics) · 2026** — weekly SKU demand forecast · stockout early-warning · overstock flag · ops-ready dashboard + API
 
@@ -134,11 +134,11 @@ Retrain monthly on the new snapshot. Track WAPE of the last 4 weeks vs seasonal-
 **Eswar Mahalingam** · B.Com · MBA · PGDLSCM · CSCMP SCPro · Six Sigma Black Belt
 Data Scientist @ Zidio Development · Ghaziabad NCR, India · Open to India · EU (Blue Card) · Gulf · Immediate joiner
 
-[![LinkedIn](https://img.shields.io/badge/✦-LINKEDIN-000000?style=for-the-badge&labelColor=C9CDD6)](https://linkedin.com/in/eswar-mahalingam)
-[![Email](https://img.shields.io/badge/✦-EMAIL-000000?style=for-the-badge&labelColor=FFFFFF)](mailto:eswarmba05313@gmail.com)
-[![Phone](https://img.shields.io/badge/✦-+91_9360548243-000000?style=for-the-badge&labelColor=C9CDD6)](tel:+919360548243)
-[![Portfolio](https://img.shields.io/badge/✦-PORTFOLIO_SITE-000000?style=for-the-badge&labelColor=FFFFFF)](https://eswar-3d-portfolio.netlify.app)
-[![Profile](https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-000000?style=for-the-badge&labelColor=FFFFFF)](https://github.com/Eswar5313)
+[![LinkedIn](https://img.shields.io/badge/✦-LINKEDIN-0B1026?style=for-the-badge&labelColor=B388FF)](https://linkedin.com/in/eswar-mahalingam)
+[![Email](https://img.shields.io/badge/✦-EMAIL-0B1026?style=for-the-badge&labelColor=00E5FF)](mailto:eswarmba05313@gmail.com)
+[![Phone](https://img.shields.io/badge/✦-+91_9360548243-0B1026?style=for-the-badge&labelColor=B388FF)](tel:+919360548243)
+[![Portfolio](https://img.shields.io/badge/✦-PORTFOLIO_SITE-0B1026?style=for-the-badge&labelColor=00E5FF)](https://eswar-3d-portfolio.netlify.app)
+[![Profile](https://img.shields.io/badge/⬅-CAREER_CONTROL_TOWER-0B1026?style=for-the-badge&labelColor=00E5FF)](https://github.com/Eswar5313)
 
 <img src="https://raw.githubusercontent.com/Eswar5313/Eswar5313/main/assets/kailash-footer.svg" width="100%" alt="" />
 
